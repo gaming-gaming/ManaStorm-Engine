@@ -1,0 +1,12 @@
+# ninja log v7
+16	1052	7825245177175310	CMakeFiles/ManaStormEngine.dir/src/graphics/render.cpp.obj	f026db6b70f22fba
+10	1370	7825245177115317	CMakeFiles/ManaStormEngine.dir/src/game_process.cpp.obj	bf8cc24a138b17b7
+7	2660	7825245177075600	CMakeFiles/ManaStormEngine.dir/src/main.cpp.obj	2ac91b288d1deb79
+13	4150	7825245177145324	CMakeFiles/ManaStormEngine.dir/src/GameMeta.cpp.obj	eeaa568d65b97ab2
+23	4192	7825245177245450	CMakeFiles/ManaStormEngine.dir/src/config/EngineConfig.cpp.obj	ba062f6c1d200ed0
+7	168	7825246094412062	build.ninja	74ce14671056387e
+7	168	7825246094412062	C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/build/cmake_install.cmake	74ce14671056387e
+13	964	7825246784638932	CMakeFiles/ManaStormEngine.dir/src/graphics/render.cpp.obj	f026db6b70f22fba
+8	1262	7825246784598959	CMakeFiles/ManaStormEngine.dir/src/game_process.cpp.obj	bf8cc24a138b17b7
+22	1007	7825247388694167	CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj	36b72b36bfc6c12e
+1007	1233	7825247398545681	ManaStormEngine.exe	f036295d314e8317

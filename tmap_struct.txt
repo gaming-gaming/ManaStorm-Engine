@@ -1,0 +1,24 @@
+Magic bytes: 'TMAP'             # 4 bytes
+
+Header:
+- Version (uint32)              # 4 bytes
+- Number of meshes (uint32)     # 4 bytes
+
+Mesh data (repeated for each mesh):
+- Mesh name length (uint16)
+- Mesh name (bytes)
+- Vertex count (uint32)
+- Vertices (float x, y, z per vertex)
+- Normal count (uint32)
+- Normals (float x, y, z per normal)
+- UV count (uint32)
+- UVs (float u, v per vertex)
+- Material name length (uint16)
+- Material name (bytes)
+
+Spawn data:
+- Spawn position (float x, y, z)
+- Spawn rotation (float yaw, pitch, roll)
+
+Map offset (for seamless world positioning):
+- Offset (float x, y, z)

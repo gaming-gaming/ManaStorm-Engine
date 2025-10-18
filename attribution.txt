@@ -1,0 +1,2 @@
+GLFW: https://www.glfw.org/download.html, Zlib
+JSON: https://github.com/nlohmann/json, MIT
