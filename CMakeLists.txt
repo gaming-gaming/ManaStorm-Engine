@@ -20,7 +20,7 @@ link_directories(lib)
 # TODO: Add SDL2
 target_link_libraries(ManaStormEngine 
     glfw3 
-    # glew32
-    # opengl32 
-    # gdi32
+    glew32
+    opengl32 
+    gdi32
 )

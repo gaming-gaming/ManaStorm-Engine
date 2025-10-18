@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-// #include <GL/glew.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 Window::Window(const char* title, bool fullscreen, int width, int height) {

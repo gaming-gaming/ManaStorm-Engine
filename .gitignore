@@ -1,0 +1,34 @@
+# Build outputs
+/bin/
+/build/
+/lib/
+/share/
+
+# Dependencies
+/include/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# IDE / compiler
+.vscode/
+.idea/
+*.sln
+*.vcxproj*
+CMakeFiles/
+CMakeCache.txt
+*.obj
+*.o
+*.pdb
+*.exe
+*.dll
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# Ignore generated assets or cache
+*.tmap.cache
+*.shadercache

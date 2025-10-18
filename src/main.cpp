@@ -9,6 +9,7 @@ const char thankyou[32] __attribute__((used, section(".rodata"))) = "Thank you f
 #include <windows.h>
 
 // #include <SDL2/SDL.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "GameMeta.hpp"

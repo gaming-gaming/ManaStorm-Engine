@@ -1,12 +1,23 @@
 # ninja log v7
-16	1052	7825245177175310	CMakeFiles/ManaStormEngine.dir/src/graphics/render.cpp.obj	f026db6b70f22fba
-10	1370	7825245177115317	CMakeFiles/ManaStormEngine.dir/src/game_process.cpp.obj	bf8cc24a138b17b7
+13	964	7825246784638932	CMakeFiles/ManaStormEngine.dir/src/graphics/render.cpp.obj	f026db6b70f22fba
+8	1262	7825246784598959	CMakeFiles/ManaStormEngine.dir/src/game_process.cpp.obj	bf8cc24a138b17b7
 7	2660	7825245177075600	CMakeFiles/ManaStormEngine.dir/src/main.cpp.obj	2ac91b288d1deb79
 13	4150	7825245177145324	CMakeFiles/ManaStormEngine.dir/src/GameMeta.cpp.obj	eeaa568d65b97ab2
 23	4192	7825245177245450	CMakeFiles/ManaStormEngine.dir/src/config/EngineConfig.cpp.obj	ba062f6c1d200ed0
-7	168	7825246094412062	build.ninja	74ce14671056387e
-7	168	7825246094412062	C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/build/cmake_install.cmake	74ce14671056387e
-13	964	7825246784638932	CMakeFiles/ManaStormEngine.dir/src/graphics/render.cpp.obj	f026db6b70f22fba
-8	1262	7825246784598959	CMakeFiles/ManaStormEngine.dir/src/game_process.cpp.obj	bf8cc24a138b17b7
+3	161	7825345221549659	build.ninja	74ce14671056387e
+3	161	7825345221499932	C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/build/cmake_install.cmake	74ce14671056387e
 22	1007	7825247388694167	CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj	36b72b36bfc6c12e
-1007	1233	7825247398545681	ManaStormEngine.exe	f036295d314e8317
+8	223	7825343823675832	ManaStormEngine.exe	d68125b5d711f056
+12	171	7825345221549659	build.ninja	74ce14671056387e
+12	171	7825345221549659	C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/build/cmake_install.cmake	74ce14671056387e
+32	235	7825345222169935	ManaStormEngine.exe	dbf5b3f952ad6677
+8	1025	7825345562032154	CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj	36b72b36bfc6c12e
+1026	1230	7825345572212597	ManaStormEngine.exe	dbf5b3f952ad6677
+11	988	7825347338087159	CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj	36b72b36bfc6c12e
+7	3536	7825347338057158	CMakeFiles/ManaStormEngine.dir/src/main.cpp.obj	2ac91b288d1deb79
+3537	3738	7825347373353129	ManaStormEngine.exe	dbf5b3f952ad6677
+8	977	7825347618543252	CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj	36b72b36bfc6c12e
+978	1184	7825347628232846	ManaStormEngine.exe	dbf5b3f952ad6677
+25	1089	7825348610475606	CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj	36b72b36bfc6c12e
+22	2086	7825348610435620	CMakeFiles/ManaStormEngine.dir/src/main.cpp.obj	2ac91b288d1deb79
+2087	2288	7825348631084829	ManaStormEngine.exe	dbf5b3f952ad6677

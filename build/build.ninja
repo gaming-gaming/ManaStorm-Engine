@@ -95,7 +95,7 @@ build CMakeFiles/ManaStormEngine.dir/src/config/EngineConfig.cpp.obj: CXX_COMPIL
 # Link the executable ManaStormEngine.exe
 
 build ManaStormEngine.exe: CXX_EXECUTABLE_LINKER__ManaStormEngine_ CMakeFiles/ManaStormEngine.dir/src/main.cpp.obj CMakeFiles/ManaStormEngine.dir/src/game_process.cpp.obj CMakeFiles/ManaStormEngine.dir/src/GameMeta.cpp.obj CMakeFiles/ManaStormEngine.dir/src/graphics/render.cpp.obj CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj CMakeFiles/ManaStormEngine.dir/src/config/EngineConfig.cpp.obj
-  LINK_LIBRARIES = -lglfw3  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_LIBRARIES = -lglfw3  -lglew32  -lopengl32  -lgdi32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
