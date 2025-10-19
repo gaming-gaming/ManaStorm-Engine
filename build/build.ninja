@@ -47,56 +47,63 @@ build cmake_object_order_depends_target_ManaStormEngine: phony || .
 build CMakeFiles/ManaStormEngine.dir/src/main.cpp.obj: CXX_COMPILER__ManaStormEngine_unscanned_ C$:/Users/miste/OneDrive/Desktop/Liberator$ Game/engine/src/main.cpp || cmake_object_order_depends_target_ManaStormEngine
   DEP_FILE = CMakeFiles\ManaStormEngine.dir\src\main.cpp.obj.d
   FLAGS = -std=gnu++20
-  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include"
+  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include" -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include/bullet"
   OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
   OBJECT_FILE_DIR = CMakeFiles\ManaStormEngine.dir\src
 
 build CMakeFiles/ManaStormEngine.dir/src/tmap_parser.cpp.obj: CXX_COMPILER__ManaStormEngine_unscanned_ C$:/Users/miste/OneDrive/Desktop/Liberator$ Game/engine/src/tmap_parser.cpp || cmake_object_order_depends_target_ManaStormEngine
   DEP_FILE = CMakeFiles\ManaStormEngine.dir\src\tmap_parser.cpp.obj.d
   FLAGS = -std=gnu++20
-  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include"
+  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include" -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include/bullet"
   OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
   OBJECT_FILE_DIR = CMakeFiles\ManaStormEngine.dir\src
 
 build CMakeFiles/ManaStormEngine.dir/src/game_process.cpp.obj: CXX_COMPILER__ManaStormEngine_unscanned_ C$:/Users/miste/OneDrive/Desktop/Liberator$ Game/engine/src/game_process.cpp || cmake_object_order_depends_target_ManaStormEngine
   DEP_FILE = CMakeFiles\ManaStormEngine.dir\src\game_process.cpp.obj.d
   FLAGS = -std=gnu++20
-  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include"
+  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include" -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include/bullet"
+  OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
+  OBJECT_FILE_DIR = CMakeFiles\ManaStormEngine.dir\src
+
+build CMakeFiles/ManaStormEngine.dir/src/PhysicsManager.cpp.obj: CXX_COMPILER__ManaStormEngine_unscanned_ C$:/Users/miste/OneDrive/Desktop/Liberator$ Game/engine/src/PhysicsManager.cpp || cmake_object_order_depends_target_ManaStormEngine
+  DEP_FILE = CMakeFiles\ManaStormEngine.dir\src\PhysicsManager.cpp.obj.d
+  FLAGS = -std=gnu++20
+  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include" -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include/bullet"
   OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
   OBJECT_FILE_DIR = CMakeFiles\ManaStormEngine.dir\src
 
 build CMakeFiles/ManaStormEngine.dir/src/GameMeta.cpp.obj: CXX_COMPILER__ManaStormEngine_unscanned_ C$:/Users/miste/OneDrive/Desktop/Liberator$ Game/engine/src/GameMeta.cpp || cmake_object_order_depends_target_ManaStormEngine
   DEP_FILE = CMakeFiles\ManaStormEngine.dir\src\GameMeta.cpp.obj.d
   FLAGS = -std=gnu++20
-  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include"
+  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include" -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include/bullet"
   OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
   OBJECT_FILE_DIR = CMakeFiles\ManaStormEngine.dir\src
 
 build CMakeFiles/ManaStormEngine.dir/src/graphics/render.cpp.obj: CXX_COMPILER__ManaStormEngine_unscanned_ C$:/Users/miste/OneDrive/Desktop/Liberator$ Game/engine/src/graphics/render.cpp || cmake_object_order_depends_target_ManaStormEngine
   DEP_FILE = CMakeFiles\ManaStormEngine.dir\src\graphics\render.cpp.obj.d
   FLAGS = -std=gnu++20
-  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include"
+  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include" -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include/bullet"
   OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
   OBJECT_FILE_DIR = CMakeFiles\ManaStormEngine.dir\src\graphics
 
 build CMakeFiles/ManaStormEngine.dir/src/graphics/TextureManager.cpp.obj: CXX_COMPILER__ManaStormEngine_unscanned_ C$:/Users/miste/OneDrive/Desktop/Liberator$ Game/engine/src/graphics/TextureManager.cpp || cmake_object_order_depends_target_ManaStormEngine
   DEP_FILE = CMakeFiles\ManaStormEngine.dir\src\graphics\TextureManager.cpp.obj.d
   FLAGS = -std=gnu++20
-  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include"
+  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include" -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include/bullet"
   OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
   OBJECT_FILE_DIR = CMakeFiles\ManaStormEngine.dir\src\graphics
 
 build CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj: CXX_COMPILER__ManaStormEngine_unscanned_ C$:/Users/miste/OneDrive/Desktop/Liberator$ Game/engine/src/graphics/window.cpp || cmake_object_order_depends_target_ManaStormEngine
   DEP_FILE = CMakeFiles\ManaStormEngine.dir\src\graphics\window.cpp.obj.d
   FLAGS = -std=gnu++20
-  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include"
+  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include" -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include/bullet"
   OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
   OBJECT_FILE_DIR = CMakeFiles\ManaStormEngine.dir\src\graphics
 
 build CMakeFiles/ManaStormEngine.dir/src/config/EngineConfig.cpp.obj: CXX_COMPILER__ManaStormEngine_unscanned_ C$:/Users/miste/OneDrive/Desktop/Liberator$ Game/engine/src/config/EngineConfig.cpp || cmake_object_order_depends_target_ManaStormEngine
   DEP_FILE = CMakeFiles\ManaStormEngine.dir\src\config\EngineConfig.cpp.obj.d
   FLAGS = -std=gnu++20
-  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include"
+  INCLUDES = -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include" -I"C:/Users/miste/OneDrive/Desktop/Liberator Game/engine/include/bullet"
   OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
   OBJECT_FILE_DIR = CMakeFiles\ManaStormEngine.dir\src\config
 
@@ -108,8 +115,8 @@ build CMakeFiles/ManaStormEngine.dir/src/config/EngineConfig.cpp.obj: CXX_COMPIL
 #############################################
 # Link the executable ManaStormEngine.exe
 
-build ManaStormEngine.exe: CXX_EXECUTABLE_LINKER__ManaStormEngine_ CMakeFiles/ManaStormEngine.dir/src/main.cpp.obj CMakeFiles/ManaStormEngine.dir/src/tmap_parser.cpp.obj CMakeFiles/ManaStormEngine.dir/src/game_process.cpp.obj CMakeFiles/ManaStormEngine.dir/src/GameMeta.cpp.obj CMakeFiles/ManaStormEngine.dir/src/graphics/render.cpp.obj CMakeFiles/ManaStormEngine.dir/src/graphics/TextureManager.cpp.obj CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj CMakeFiles/ManaStormEngine.dir/src/config/EngineConfig.cpp.obj
-  LINK_LIBRARIES = -lglfw3  -lglew32  -lopengl32  -lgdi32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+build ManaStormEngine.exe: CXX_EXECUTABLE_LINKER__ManaStormEngine_ CMakeFiles/ManaStormEngine.dir/src/main.cpp.obj CMakeFiles/ManaStormEngine.dir/src/tmap_parser.cpp.obj CMakeFiles/ManaStormEngine.dir/src/game_process.cpp.obj CMakeFiles/ManaStormEngine.dir/src/PhysicsManager.cpp.obj CMakeFiles/ManaStormEngine.dir/src/GameMeta.cpp.obj CMakeFiles/ManaStormEngine.dir/src/graphics/render.cpp.obj CMakeFiles/ManaStormEngine.dir/src/graphics/TextureManager.cpp.obj CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj CMakeFiles/ManaStormEngine.dir/src/config/EngineConfig.cpp.obj
+  LINK_LIBRARIES = -lglfw3  -lglew32  -lopengl32  -lgdi32  -lBulletDynamics  -lBulletCollision  -lLinearMath  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\ManaStormEngine.dir
   POST_BUILD = cd .
   PRE_LINK = cd .

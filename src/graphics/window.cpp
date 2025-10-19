@@ -1,11 +1,12 @@
 #include "window.hpp"
-#include "render.hpp"
 
 #include <windows.h>
 #include <iostream>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+#include "render.hpp"
 
 // Static callback function for mouse button events
 static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
@@ -32,6 +33,8 @@ Window::Window(const char* title, bool fullscreen, int width, int height) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     
+    m_width = width;  // Initialize m_width
+    m_height = height; // Initialize m_height
     m_window = glfwCreateWindow(width, height, title, fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
     if (!m_window) {
@@ -78,7 +81,7 @@ Window::~Window() {
 }
 
 void Window::update(int width, int height) {
-    RenderFrame(width, height);
+    RenderFrame(width, height); // Render the 3D scene
     glfwSwapBuffers(m_window);
     glfwPollEvents();
 }

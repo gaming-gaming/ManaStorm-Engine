@@ -9,6 +9,7 @@ add_executable(ManaStormEngine
     src/main.cpp
     src/tmap_parser.cpp
     src/game_process.cpp
+    src/PhysicsManager.cpp
     src/GameMeta.cpp
     src/graphics/render.cpp
     src/graphics/TextureManager.cpp
@@ -18,11 +19,15 @@ add_executable(ManaStormEngine
 
 # Add libraries
 include_directories(include)
+include_directories(include/bullet)
 link_directories(lib)
 # TODO: Add SDL2
 target_link_libraries(ManaStormEngine 
-    glfw3 
+    glfw3
     glew32
-    opengl32 
+    opengl32
     gdi32
+    BulletDynamics
+    BulletCollision
+    LinearMath
 )
