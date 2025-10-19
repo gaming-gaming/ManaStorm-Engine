@@ -21,3 +21,10 @@
 25	1089	7825348610475606	CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj	36b72b36bfc6c12e
 22	2086	7825348610435620	CMakeFiles/ManaStormEngine.dir/src/main.cpp.obj	2ac91b288d1deb79
 2087	2288	7825348631084829	ManaStormEngine.exe	dbf5b3f952ad6677
+35	1182	7825352967752264	CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj	36b72b36bfc6c12e
+22	2146	7825352967622236	CMakeFiles/ManaStormEngine.dir/src/main.cpp.obj	2ac91b288d1deb79
+8	273	7825355700879988	ManaStormEngine.exe	dbf5b3f952ad6677
+12	675	7825363310647535	CMakeFiles/ManaStormEngine.dir/src/graphics/render.cpp.obj	f026db6b70f22fba
+8	911	7825363310617526	CMakeFiles/ManaStormEngine.dir/src/game_process.cpp.obj	bf8cc24a138b17b7
+15	1506	7825363310677533	CMakeFiles/ManaStormEngine.dir/src/graphics/window.cpp.obj	36b72b36bfc6c12e
+1506	1730	7825363325592149	ManaStormEngine.exe	dbf5b3f952ad6677
