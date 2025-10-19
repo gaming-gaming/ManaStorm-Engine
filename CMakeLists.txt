@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 # TODO: Make line below say "add_executable(ManaStormEngine WIN32"
 add_executable(ManaStormEngine
     src/main.cpp
+    src/tmap_parser.cpp
     src/game_process.cpp
     src/GameMeta.cpp
     src/graphics/render.cpp

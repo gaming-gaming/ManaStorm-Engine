@@ -1,5 +1,14 @@
 #pragma once
 #include <string>
+#include <vector>
+#include <glm/glm.hpp>
+
+using vec3 = glm::vec3;
+
+struct Player {
+    glm::vec3 position;  // x, y, z
+    glm::vec3 rotation;  // yaw, pitch, roll
+};
 
 class World {
 public:
@@ -11,4 +20,4 @@ public:
 };
 
 bool setTmap(const std::string& filePath);
-void runGameProcess();
+void runGameProcess(float deltaTime);

@@ -9,7 +9,7 @@ public:
     Window(const char* title, bool fullscreen, int width, int height);
     ~Window();
 
-    void update();
+    void update(int width, int height);
     bool shouldClose() const;
 
 private:

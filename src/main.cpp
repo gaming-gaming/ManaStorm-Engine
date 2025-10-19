@@ -15,6 +15,7 @@ const char thankyou[32] __attribute__((used, section(".rodata"))) = "Thank you f
 #include "GameMeta.hpp"
 #include "game_process.hpp"
 #include "config/EngineConfig.hpp"
+#include "input/input.hpp"
 #include "graphics/window.hpp"
 
 const std::string CONFIG_FILE_NAME = "engine_config.json";
@@ -42,6 +43,8 @@ int main() {
     // Load game metadata
     GameMeta game_meta;
     game_meta.loadFromFile("../../" + META_FILE_NAME);
+    int window_width = engine_config.getResolutionWidth();
+    int window_height = engine_config.getResolutionHeight();
 
     // Window title
     const std::string title_str = game_meta.getTitle();
@@ -51,8 +54,8 @@ int main() {
         title_str.c_str(),
         // engine_config.getDisplayMode() == "fullscreen",
         false,
-        engine_config.getResolutionWidth(),
-        engine_config.getResolutionHeight()
+        window_width,
+        window_height
     );
 
     // Set the TMAP file
@@ -79,11 +82,11 @@ int main() {
         lag += elapsed.count();
 
         // Process input and update window
-        window.update();
+        window.update(window_width, window_height);
 
         // Update game logic at fixed tick rate
         while (lag >= TICK_RATE) {
-            runGameProcess();
+            runGameProcess(TICK_RATE);
             lag -= TICK_RATE;
         }
 
