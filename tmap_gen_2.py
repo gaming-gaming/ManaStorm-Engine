@@ -81,14 +81,14 @@ meshes = [
         'vertices': cube_vertices,
         'normals': cube_normals,
         'uvs': cube_uvs,
-        'material': 'Default'
+        'material': 'concrete'
     },
     {
         'name': 'Floor',
         'vertices': floor_vertices,
         'normals': floor_normals,
         'uvs': floor_uvs,
-        'material': 'Ground'
+        'material': 'sterile_tile'
     }
 ]
 

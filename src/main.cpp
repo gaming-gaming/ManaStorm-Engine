@@ -16,6 +16,8 @@ const char thankyou[32] __attribute__((used, section(".rodata"))) = "Thank you f
 #include "game_process.hpp"
 #include "config/EngineConfig.hpp"
 #include "input/input.hpp"
+#include "graphics/render.hpp"
+#include "graphics/TextureManager.hpp"
 #include "graphics/window.hpp"
 
 const std::string CONFIG_FILE_NAME = "engine_config.json";
@@ -57,6 +59,9 @@ int main() {
         window_width,
         window_height
     );
+
+    // Set up the materials path for the renderer
+    SetMaterialsPath("../../" + game_meta.getDirectory() + "/materials");
 
     // Set the TMAP file
     if (!setTmap("../../" + game_meta.getDirectory() + "/maps/test.tmap")) {

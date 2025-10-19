@@ -11,6 +11,7 @@ add_executable(ManaStormEngine
     src/game_process.cpp
     src/GameMeta.cpp
     src/graphics/render.cpp
+    src/graphics/TextureManager.cpp
     src/graphics/window.cpp
     src/config/EngineConfig.cpp
 )
