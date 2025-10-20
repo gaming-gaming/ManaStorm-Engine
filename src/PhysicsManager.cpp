@@ -9,7 +9,7 @@ PhysicsManager::PhysicsManager() {
     solver = new btSequentialImpulseConstraintSolver();
     
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-    dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
+    dynamicsWorld->setGravity(btVector3(0, GRAVITY, 0));
     
     std::cout << "Physics: Initialized Bullet physics world" << std::endl;
 }
@@ -89,37 +89,30 @@ void PhysicsManager::createStaticMeshCollision(const TMAPData& mapData) {
 }
 
 btRigidBody* PhysicsManager::createPlayerCapsule(const glm::vec3& position, float radius, float height) {
-    // Create capsule shape (upright, Y-axis aligned)
     btCapsuleShape* capsuleShape = new btCapsuleShape(radius, height);
     collisionShapes.push_back(capsuleShape);
     
-    // Set up transform at spawn position
     btTransform startTransform;
     startTransform.setIdentity();
     startTransform.setOrigin(glmToBt(position));
     
-    float mass = 70.0f; // 70kg player
+    float mass = 70.0f;
     btVector3 localInertia(0, 0, 0);
     capsuleShape->calculateLocalInertia(mass, localInertia);
     
     btDefaultMotionState* motionState = new btDefaultMotionState(startTransform);
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, capsuleShape, localInertia);
     
-    // Set physics properties
-    rbInfo.m_friction = 0.5f; // Moderate friction
-    rbInfo.m_restitution = 0.0f; // No bouncing
-    rbInfo.m_linearDamping = 0.0f; // No air resistance (we handle this manually)
-    rbInfo.m_angularDamping = 0.95f; // Heavy angular damping to prevent spinning
+    // Set friction to nearly zero to prevent wall-hugging
+    rbInfo.m_friction = 0.0f; // No friction - we handle it manually
+    rbInfo.m_restitution = 0.0f;
+    rbInfo.m_linearDamping = 0.0f;
+    rbInfo.m_angularDamping = 0.95f;
     
     btRigidBody* body = new btRigidBody(rbInfo);
-    
-    // Lock rotation on X and Z axes - only allow Y rotation (turning)
     body->setAngularFactor(btVector3(0, 1, 0));
-    
-    // Prevent deactivation (sleeping) so player is always responsive
     body->setActivationState(DISABLE_DEACTIVATION);
     
-    // Add to world
     dynamicsWorld->addRigidBody(body);
     rigidBodies.push_back(body);
     
@@ -127,4 +120,8 @@ btRigidBody* PhysicsManager::createPlayerCapsule(const glm::vec3& position, floa
               << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
     
     return body;
+}
+
+btDiscreteDynamicsWorld* PhysicsManager::getDynamicsWorld() const {
+    return dynamicsWorld;
 }

@@ -23,7 +23,7 @@ const char thankyou[32] __attribute__((used, section(".rodata"))) = "Thank you f
 const std::string CONFIG_FILE_NAME = "engine_config.json";
 const std::string META_FILE_NAME = "game_meta.json";
 const double TICK_RATE = 1.0 / 60.0; // Game runs at 60 ticks per second, interpolated rendering
-int framerate_limit = 120; // TODO: Make this configurable later, if 0 then uncapped
+int framerateLimit = 120; // TODO: Make this configurable later, if 0 then uncapped
 
 int main() {
     // Initialize game development libraries
@@ -39,32 +39,32 @@ int main() {
     */
 
     // Load engine configuration
-    EngineConfig engine_config;
-    engine_config.loadFromFile("../../dat/" + CONFIG_FILE_NAME);
+    EngineConfig engineConfig;
+    engineConfig.loadFromFile("../dat/" + CONFIG_FILE_NAME);
 
     // Load game metadata
-    GameMeta game_meta;
-    game_meta.loadFromFile("../../" + META_FILE_NAME);
-    int window_width = engine_config.getResolutionWidth();
-    int window_height = engine_config.getResolutionHeight();
+    GameMeta gameMeta;
+    gameMeta.loadFromFile("../" + META_FILE_NAME);
+    int windowWidth = engineConfig.getResolutionWidth();
+    int windowHeight = engineConfig.getResolutionHeight();
 
     // Window title
-    const std::string title_str = game_meta.getTitle();
+    const std::string titleStr = gameMeta.getTitle();
 
     // Main window
     Window window(
-        title_str.c_str(),
-        // engine_config.getDisplayMode() == "fullscreen",
+        titleStr.c_str(),
+        // engineConfig.getDisplayMode() == "fullscreen",
         false,
-        window_width,
-        window_height
+        windowWidth,
+        windowHeight
     );
 
     // Set up the materials path for the renderer
-    SetMaterialsPath("../../" + game_meta.getDirectory() + "/materials");
+    SetMaterialsPath("../" + gameMeta.getDirectory() + "/materials");
 
     // Set the TMAP file
-    if (!setTmap("../../" + game_meta.getDirectory() + "/maps/test.tmap")) {
+    if (!setTmap("../" + gameMeta.getDirectory() + "/maps/test.tmap")) {
         std::cerr << "Failed to load TMAP file." << std::endl;
         return 1;
     }
@@ -87,7 +87,7 @@ int main() {
         lag += elapsed.count();
 
         // Process input and update window
-        window.update(window_width, window_height);
+        window.update(windowWidth, windowHeight);
 
         // Update game logic at fixed tick rate
         while (lag >= TICK_RATE) {
@@ -96,8 +96,8 @@ int main() {
         }
 
         // Sleep to maintain frame rate limit
-        if (framerate_limit > 0) {
-            Sleep(static_cast<DWORD>(1000 / framerate_limit));
+        if (framerateLimit > 0) {
+            Sleep(static_cast<DWORD>(1000 / framerateLimit));
         }
     }
 

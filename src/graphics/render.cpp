@@ -209,7 +209,7 @@ void SetCameraRotation(const glm::vec3& rotation) {
 }
 
 void RenderFrame(int width, int height) {
-    glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black background for space
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (g_worldMeshes.empty()) {
@@ -220,7 +220,7 @@ void RenderFrame(int width, int height) {
     
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::lookAt(g_cameraPos, g_cameraPos + g_cameraFront, g_cameraUp);
-    glm::mat4 projection = glm::perspective(glm::radians(90.0f * fov_multiplier), static_cast<float>(width) / height, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(90.0f * fovMultiplier), static_cast<float>(width) / height, 0.1f, 100.0f);
     
     GLint modelLoc = glGetUniformLocation(shaderProgram, "model");
     GLint viewLoc = glGetUniformLocation(shaderProgram, "view");

@@ -6,6 +6,8 @@
 #include <vector>
 #include "tmap_parser.hpp"
 
+static float GRAVITY = -9.81f; // -9.81 m/s² is the gravity of Earth (May change later if the game feels better with different gravity)
+
 class PhysicsManager {
 private:
     btDiscreteDynamicsWorld* dynamicsWorld;
@@ -38,6 +40,8 @@ public:
     static glm::vec3 btToGlm(const btVector3& v) {
         return glm::vec3(v.x(), v.y(), v.z());
     }
+
+    btDiscreteDynamicsWorld* getDynamicsWorld() const;
 };
 
 #endif // PHYSICS_MANAGER_HPP

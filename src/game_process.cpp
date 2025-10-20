@@ -15,7 +15,20 @@ PhysicsManager* g_physics = nullptr;
 static POINT lastMousePos = { -1, -1 };
 POINT mousePos;
 
-float fov_multiplier = 1.0f; // Multiplier for FOV based on velocity, locked between 1.0 and 1.25 (90 to 112.5 degrees)
+float fovMultiplier = 1.0f;
+// const float CAMERA_Y_OFFSET = 0.72f; // Camera height offset from player position
+const float CAMERA_Y_OFFSET = 0.0f;
+
+glm::vec3 PLAYER_SIZE = glm::vec3(0.4f, 1.8f, 0.4f);
+
+int ticksSpaceHeld = 0;
+int TICKS_SPACE_HELD_MAX = 6; // For "bunny hop" movement
+
+int ticksSinceLastJump = 0;
+const int TICKS_BETWEEN_JUMPS_MIN = 6;
+
+int coyoteTimeTicks = 0;
+const int COYOTE_TIME_TICKS_MAX = 6;
 
 bool setTmap(const std::string& filePath) {
     std::cout << "setTmap: Attempting to load " << filePath << std::endl;
@@ -36,7 +49,7 @@ bool setTmap(const std::string& filePath) {
         g_physics->createStaticMeshCollision(g_mapData);
         
         // Set player at spawn position
-        g_player.size = glm::vec3(0.4f, 1.8f, 0.4f); // radius, height, radius
+        g_player.size = PLAYER_SIZE;
         g_player.position = glm::vec3(g_mapData.spawnPosition.x, 
                                       g_mapData.spawnPosition.y,
                                       g_mapData.spawnPosition.z);
@@ -62,34 +75,56 @@ bool setTmap(const std::string& filePath) {
     }
 }
 
-// Check if player is on ground using raycast
+// Check if player is on ground
 bool isPlayerOnGround() {
     if (!g_player.rigidBody) return false;
     
-    btTransform trans;
-    g_player.rigidBody->getMotionState()->getWorldTransform(trans);
-    btVector3 from = trans.getOrigin();
-    btVector3 to = from - btVector3(0, g_player.size.y / 2.0f + 0.1f, 0);
+    int numManifolds = g_physics->getDynamicsWorld()->getDispatcher()->getNumManifolds();
     
-    btCollisionWorld::ClosestRayResultCallback rayCallback(from, to);
-    g_physics->step(0); // Ensure we can access the dynamics world
+    for (int i = 0; i < numManifolds; i++) {
+        btPersistentManifold* contactManifold = 
+            g_physics->getDynamicsWorld()->getDispatcher()->getManifoldByIndexInternal(i);
+        
+        const btCollisionObject* objA = contactManifold->getBody0();
+        const btCollisionObject* objB = contactManifold->getBody1();
+        
+        // Check if player is involved in this contact
+        if (objA != g_player.rigidBody && objB != g_player.rigidBody) {
+            continue;
+        }
+        
+        // Check contact points
+        int numContacts = contactManifold->getNumContacts();
+        for (int j = 0; j < numContacts; j++) {
+            btManifoldPoint& pt = contactManifold->getContactPoint(j);
+            
+            // Check if contact normal points upward (ground contact)
+            btVector3 normal = pt.m_normalWorldOnB;
+            if (objB == g_player.rigidBody) {
+                normal = -normal; // Flip if player is objB
+            }
+            
+            // If normal points up (ground below player), we're on ground
+            if (normal.y() > 0.7f) { // Threshold for "upward" normal
+                return true;
+            }
+        }
+    }
     
-    // This is a simplified check - you'd get the dynamics world from PhysicsManager
-    // For now, we'll use velocity check
-    btVector3 vel = g_player.rigidBody->getLinearVelocity();
-    return fabs(vel.y()) < 0.5f;
+    return false;
 }
 
 void handleInput(float deltaTime) {
     if (!g_player.rigidBody) return;
     
-    float moveSpeed = 5.0f; // Target speed in m/s
-    float acceleration = 40.0f; // How fast we reach target speed
-    float airControl = 0.3f; // Reduced control in air
-    float maxSpeed = 8.0f; // Terminal velocity for horizontal movement
-    float jumpForce = 5.5f;
+    // Movement parameters
+    float moveSpeed = 8.0f;
+    float acceleration = 20.0f;
+    float airControl = 0.25f;
+    float maxSpeed = 16.0f;
+    float jumpForce = 5.0f;
     
-    // Calculate forward and right vectors based on the player's rotation
+    // Calculate direction vectors
     glm::vec3 forward = glm::normalize(glm::vec3(
         sin(glm::radians(g_player.rotation.y)),
         0.0f,
@@ -98,21 +133,21 @@ void handleInput(float deltaTime) {
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 right = glm::normalize(glm::cross(forward, up));
     
-    // Get current velocity
     btVector3 velocity = g_player.rigidBody->getLinearVelocity();
     glm::vec3 horizontalVel(velocity.x(), 0, velocity.z());
-    // Set FOV multiplier based on horizontal speed, TODO: Make this better and smoother, but much later and maybe if when slow-mo is a mechanic
+
+    // Adjust FOV based on horizontal speed
     float horizontalSpeed = glm::length(horizontalVel);
-    // fov_multiplier = 1.0f + glm::clamp(horizontalSpeed / maxSpeed * 0.25f, 0.0f, 0.25f); // KEEP COMMENTED OUT FOR NOW
+    fovMultiplier = glm::clamp(horizontalSpeed / maxSpeed * 0.25f, 0.0f, 0.25f) * glm::clamp(horizontalSpeed / maxSpeed * 0.25f, 0.0f, 0.25f);
+    fovMultiplier = 1.0f + fovMultiplier;
+
+    bool onGround = isPlayerOnGround();
     
-    // Check if on ground (simple check)
-    bool onGround = fabs(velocity.y()) < 1.0f;
-    
-    // Calculate desired movement direction
     glm::vec3 moveDir(0.0f);
     bool isMoving = false;
     
-    #ifdef _WIN32
+    // Handle movement input
+    #ifdef _WIN32 // TODO: Move some of this logic outside of Windows-specific code (e.g. jumping)
     if (GetAsyncKeyState('W') & 0x8000) {
         moveDir += right;
         isMoving = true;
@@ -130,53 +165,68 @@ void handleInput(float deltaTime) {
         isMoving = true;
     }
     
-    // Apply movement
+    // Normalize movement direction
     if (isMoving && glm::length(moveDir) > 0.01f) {
         moveDir = glm::normalize(moveDir);
-        
-        // Calculate desired velocity change
         glm::vec3 targetVel = moveDir * moveSpeed;
         glm::vec3 velDiff = targetVel - horizontalVel;
         
-        // Apply force (stronger on ground)
         float controlFactor = onGround ? 1.0f : airControl;
         glm::vec3 force = velDiff * acceleration * controlFactor * g_player.rigidBody->getMass();
         
         g_player.rigidBody->applyCentralForce(btVector3(force.x, 0, force.z));
-    } else if (onGround) {
-        // Apply friction when not moving
+    } else if (onGround) { // Apply friction when no input and on ground
         float currentHorizontalSpeed = glm::length(horizontalVel);
         if (currentHorizontalSpeed > 0.1f) {
             glm::vec3 friction = horizontalVel * -10.0f * g_player.rigidBody->getMass();
             g_player.rigidBody->applyCentralForce(btVector3(friction.x, 0, friction.z));
         } else {
-            // Kill small velocities to prevent sliding
             g_player.rigidBody->setLinearVelocity(btVector3(0, velocity.y(), 0));
         }
     }
     
-    // Clamp horizontal velocity to max speed
+    // Clamp horizontal speed
     float currentSpeed = glm::length(horizontalVel);
     if (currentSpeed > maxSpeed) {
         glm::vec3 clampedVel = glm::normalize(horizontalVel) * maxSpeed;
         g_player.rigidBody->setLinearVelocity(btVector3(clampedVel.x, velocity.y(), clampedVel.z));
     }
     
-    // Jumping
-    static bool wasSpacePressed = false;
+    // Handle jumping
+    // static bool wasSpacePressed = false; // No longer needed; using ticksSpaceHeld instead
     bool spacePressed = (GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
     
-    if (spacePressed && !wasSpacePressed && onGround) {
-        g_player.rigidBody->applyCentralImpulse(btVector3(0, jumpForce * g_player.rigidBody->getMass(), 0));
+    // Update coyote time before jump check
+    if (onGround) {
+        coyoteTimeTicks = 0;
+    } else {
+        coyoteTimeTicks++;
     }
-    wasSpacePressed = spacePressed;
     
-    // Mouse look
+    // There are a whole lot of silly rules here to make jumping feel good, here's a summary:
+    // - Space must be pressed, and held for less than TICKS_SPACE_HELD_MAX (to allow "bunny hopping", but not holding space forever)
+    // - Must have waited at least TICKS_BETWEEN_JUMPS_MIN since last jump (prevents double-jumping when coyote time is active)
+    // - Must be on ground, or within COYOTE_TIME_TICKS_MAX since leaving ground
+    // - Y velocity cannot be too high (prevents jumping while capsule is climbing a ledge, that makes an absurdly high jump)
+    if (spacePressed && (ticksSpaceHeld < TICKS_SPACE_HELD_MAX) && ticksSinceLastJump > TICKS_BETWEEN_JUMPS_MIN && (onGround || coyoteTimeTicks < COYOTE_TIME_TICKS_MAX) && velocity.y() <= 0.5f) {
+        g_player.rigidBody->applyCentralImpulse(btVector3(0, jumpForce * g_player.rigidBody->getMass(), 0));
+        ticksSinceLastJump = 0;
+        coyoteTimeTicks = COYOTE_TIME_TICKS_MAX; // Consume coyote time
+    }
+
+    ticksSinceLastJump++;
+    if (spacePressed) {
+        ticksSpaceHeld++;
+    } else {
+        ticksSpaceHeld = 0;
+    }
+    // wasSpacePressed = spacePressed;
+    
+    // Handle mouse look
     double mousePosX, mousePosY;
     glfwGetCursorPos(glfwGetCurrentContext(), &mousePosX, &mousePosY);
     mousePos.x = static_cast<LONG>(mousePosX);
     mousePos.y = static_cast<LONG>(mousePosY);
-    
     if (lastMousePos.x != -1 && lastMousePos.y != -1) {
         float mouseSensitivity = 0.1f;
         float deltaX = static_cast<float>(mousePos.x - lastMousePos.x);
@@ -193,13 +243,11 @@ void handleInput(float deltaTime) {
     lastMousePos.y = mousePos.y;
     #endif
     
-    // Get player position from physics
     btTransform trans;
     g_player.rigidBody->getMotionState()->getWorldTransform(trans);
     g_player.position = PhysicsManager::btToGlm(trans.getOrigin());
-    
-    // Update renderer camera
-    SetCameraPosition(g_player.position);
+
+    SetCameraPosition(g_player.position + glm::vec3(0.0f, CAMERA_Y_OFFSET, 0.0f));
     SetCameraRotation(g_player.rotation);
 }
 

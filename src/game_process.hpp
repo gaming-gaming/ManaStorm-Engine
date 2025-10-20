@@ -6,7 +6,19 @@
 
 using vec3 = glm::vec3;
 
-extern float fov_multiplier; // Multiplier for FOV based on velocity, locked between 1.0 and 1.25 (90 to 112.5 degrees)
+extern float fovMultiplier; // Multiplier for FOV based on velocity, locked between 1.0 and 1.25 (90 to 112.5 degrees)
+extern const float CAMERA_Y_OFFSET;
+
+extern glm::vec3 PLAYER_SIZE;
+
+extern int ticksSpaceHeld;
+extern int TICKS_SPACE_HELD_MAX;
+
+extern int ticksSinceLastJump;
+extern const int TICKS_BETWEEN_JUMPS_MIN;
+
+extern int coyoteTimeTicks;
+extern const int COYOTE_TIME_TICKS_MAX;
 
 struct Player {
     glm::vec3 size;      // width, height, depth

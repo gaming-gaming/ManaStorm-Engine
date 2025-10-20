@@ -77,8 +77,33 @@ floor_uvs = [(0, 0), (10, 0), (10, 10), (0, 0), (10, 10), (0, 10)]
 # Test meshes
 meshes = [
     {
-        'name': 'Cube',
+        'name': 'Cube_0',
         'vertices': cube_vertices,
+        'offset': (0, 0, 0),
+        'normals': cube_normals,
+        'uvs': cube_uvs,
+        'material': 'concrete'
+    },
+    {
+        'name': 'Cube_1',
+        'vertices': cube_vertices,
+        'offset': (4, -1, 0),
+        'normals': cube_normals,
+        'uvs': cube_uvs,
+        'material': 'concrete'
+    },
+    {
+        'name': 'Cube_2',
+        'vertices': cube_vertices,
+        'offset': (6, -2, 0),
+        'normals': cube_normals,
+        'uvs': cube_uvs,
+        'material': 'concrete'
+    },
+    {
+        'name': 'Cube_3',
+        'vertices': cube_vertices,
+        'offset': (-4, 1, 0),
         'normals': cube_normals,
         'uvs': cube_uvs,
         'material': 'concrete'
@@ -108,8 +133,12 @@ with open('test.tmap', 'wb') as f:
     
     # Write meshes
     for mesh in meshes:
-        write_mesh(f, mesh['name'], mesh['vertices'], mesh['normals'], mesh['uvs'], mesh['material'])
-    
+        # Apply offset to vertices if present
+        if 'offset' in mesh:
+            offset_vec = mesh['offset']
+            adjusted_vertices = [(v[0] + offset_vec[0], v[1] + offset_vec[1], v[2] + offset_vec[2]) for v in mesh['vertices']]
+        write_mesh(f, mesh['name'], adjusted_vertices if 'offset' in mesh else mesh['vertices'], mesh['normals'], mesh['uvs'], mesh['material'])
+
     # Spawn position
     f.write(struct.pack('<fff', *spawn))
     
