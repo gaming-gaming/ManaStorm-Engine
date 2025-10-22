@@ -7,6 +7,7 @@
 #include "tmap_parser.hpp"
 #include "graphics/render.hpp"
 #include "PhysicsManager.hpp"
+#include "input/InputManager.hpp"
 
 TMAPData g_mapData;
 Player g_player;
@@ -21,8 +22,8 @@ const float CAMERA_Y_OFFSET = 0.0f;
 
 glm::vec3 PLAYER_SIZE = glm::vec3(0.4f, 1.8f, 0.4f);
 
-int ticksSpaceHeld = 0;
-int TICKS_SPACE_HELD_MAX = 6; // For "bunny hop" movement
+int ticksJumpHeld = 0;
+int TICKS_JUMP_HELD_MAX = 3; // For "bunny hop" movement
 
 int ticksSinceLastJump = 0;
 const int TICKS_BETWEEN_JUMPS_MIN = 6;
@@ -117,21 +118,21 @@ bool isPlayerOnGround() {
 void handleInput(float deltaTime) {
     if (!g_player.rigidBody) return;
     
-    // Movement parameters
-    float moveSpeed = 8.0f;
+    // Movement parameters, TODO: Make these increase with progression
+    float moveSpeed = 6.0f;
     float acceleration = 20.0f;
     float airControl = 0.25f;
     float maxSpeed = 16.0f;
     float jumpForce = 5.0f;
     
     // Calculate direction vectors
-    glm::vec3 forward = glm::normalize(glm::vec3(
+    glm::vec3 right = glm::normalize(glm::vec3(
         sin(glm::radians(g_player.rotation.y)),
         0.0f,
-        -cos(glm::radians(g_player.rotation.y))
+        cos(glm::radians(g_player.rotation.y))
     ));
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 right = glm::normalize(glm::cross(forward, up));
+    glm::vec3 forward = glm::normalize(glm::cross(up, right));
     
     btVector3 velocity = g_player.rigidBody->getLinearVelocity();
     glm::vec3 horizontalVel(velocity.x(), 0, velocity.z());
@@ -147,6 +148,52 @@ void handleInput(float deltaTime) {
     bool isMoving = false;
     
     // Handle movement input
+    ControllerState inputState = ProcessInput();
+    if (inputState.buttons.move_forward) {
+        moveDir += forward;
+        isMoving = true;
+    }
+    if (inputState.buttons.move_backward) {
+        moveDir -= forward;
+        isMoving = true;
+    }
+    if (inputState.buttons.move_left) {
+        moveDir -= right;
+        isMoving = true;
+    }
+    if (inputState.buttons.move_right) {
+        moveDir += right;
+        isMoving = true;
+    }
+    // If none of the WASD keys are pressed, check analog stick
+    if (!isMoving) {
+        float deadZone = 0.2f;
+        if (std::abs(inputState.analog.left_x) > deadZone || std::abs(inputState.analog.left_y) > deadZone) {
+            moveDir += forward * -inputState.analog.left_y; // Invert Y for typical stick behavior
+            moveDir += right * inputState.analog.left_x;
+            isMoving = true;
+        }
+    }
+    // Normalize movement direction
+    if (isMoving && glm::length(moveDir) > 0.01f) {
+        moveDir = glm::normalize(moveDir);
+        glm::vec3 targetVel = moveDir * moveSpeed;
+        glm::vec3 velDiff = targetVel - horizontalVel;
+        
+        float controlFactor = onGround ? 1.0f : airControl;
+        glm::vec3 force = velDiff * acceleration * controlFactor * g_player.rigidBody->getMass();
+        
+        g_player.rigidBody->applyCentralForce(btVector3(force.x, 0, force.z));
+    } else if (onGround) { // Apply friction when no input and on ground
+        float currentHorizontalSpeed = glm::length(horizontalVel);
+        if (currentHorizontalSpeed > 0.1f) {
+            glm::vec3 friction = horizontalVel * -10.0f * g_player.rigidBody->getMass();
+            g_player.rigidBody->applyCentralForce(btVector3(friction.x, 0, friction.z));
+        } else {
+            g_player.rigidBody->setLinearVelocity(btVector3(0, velocity.y(), 0));
+        }
+    }
+    /*
     #ifdef _WIN32 // TODO: Move some of this logic outside of Windows-specific code (e.g. jumping)
     if (GetAsyncKeyState('W') & 0x8000) {
         moveDir += right;
@@ -184,6 +231,7 @@ void handleInput(float deltaTime) {
             g_player.rigidBody->setLinearVelocity(btVector3(0, velocity.y(), 0));
         }
     }
+    */
     
     // Clamp horizontal speed
     float currentSpeed = glm::length(horizontalVel);
@@ -194,7 +242,7 @@ void handleInput(float deltaTime) {
     
     // Handle jumping
     // static bool wasSpacePressed = false; // No longer needed; using ticksSpaceHeld instead
-    bool spacePressed = (GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
+    bool jumpPressed = inputState.buttons.jump;
     
     // Update coyote time before jump check
     if (onGround) {
@@ -204,23 +252,23 @@ void handleInput(float deltaTime) {
     }
     
     // There are a whole lot of silly rules here to make jumping feel good, here's a summary:
-    // - Space must be pressed, and held for less than TICKS_SPACE_HELD_MAX (to allow "bunny hopping", but not holding space forever)
+    // - Jump must be pressed, and held for less than TICKS_JUMP_HELD_MAX (to allow "bunny hopping", but not holding jump forever)
     // - Must have waited at least TICKS_BETWEEN_JUMPS_MIN since last jump (prevents double-jumping when coyote time is active)
     // - Must be on ground, or within COYOTE_TIME_TICKS_MAX since leaving ground
     // - Y velocity cannot be too high (prevents jumping while capsule is climbing a ledge, that makes an absurdly high jump)
-    if (spacePressed && (ticksSpaceHeld < TICKS_SPACE_HELD_MAX) && ticksSinceLastJump > TICKS_BETWEEN_JUMPS_MIN && (onGround || coyoteTimeTicks < COYOTE_TIME_TICKS_MAX) && velocity.y() <= 0.5f) {
+    if (jumpPressed && (ticksJumpHeld < TICKS_JUMP_HELD_MAX) && ticksSinceLastJump > TICKS_BETWEEN_JUMPS_MIN && (onGround || coyoteTimeTicks < COYOTE_TIME_TICKS_MAX) && velocity.y() <= 0.5f) {
         g_player.rigidBody->applyCentralImpulse(btVector3(0, jumpForce * g_player.rigidBody->getMass(), 0));
         ticksSinceLastJump = 0;
         coyoteTimeTicks = COYOTE_TIME_TICKS_MAX; // Consume coyote time
     }
 
     ticksSinceLastJump++;
-    if (spacePressed) {
-        ticksSpaceHeld++;
+    if (jumpPressed) {
+        ticksJumpHeld++;
     } else {
-        ticksSpaceHeld = 0;
+        ticksJumpHeld = 0;
     }
-    // wasSpacePressed = spacePressed;
+    // wasJumpPressed = jumpPressed;
     
     // Handle mouse look
     double mousePosX, mousePosY;
@@ -241,7 +289,18 @@ void handleInput(float deltaTime) {
     }
     lastMousePos.x = mousePos.x;
     lastMousePos.y = mousePos.y;
-    #endif
+    // Right analog stick for camera look
+    float lookDeadZone = 0.15f;
+    float lookSensitivity = 3.0f; // Adjust this to taste
+    if (std::abs(inputState.analog.right_x) > lookDeadZone || std::abs(inputState.analog.right_y) > lookDeadZone) {
+        g_player.rotation.y += inputState.analog.right_x * lookSensitivity;
+        g_player.rotation.x -= inputState.analog.right_y * lookSensitivity;
+        
+        // Clamp pitch
+        if (g_player.rotation.x > 89.0f) g_player.rotation.x = 89.0f;
+        if (g_player.rotation.x < -89.0f) g_player.rotation.x = -89.0f;
+    }
+    // #endif
     
     btTransform trans;
     g_player.rigidBody->getMotionState()->getWorldTransform(trans);

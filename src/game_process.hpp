@@ -11,8 +11,8 @@ extern const float CAMERA_Y_OFFSET;
 
 extern glm::vec3 PLAYER_SIZE;
 
-extern int ticksSpaceHeld;
-extern int TICKS_SPACE_HELD_MAX;
+extern int ticksJumpHeld;
+extern int TICKS_JUMP_HELD_MAX;
 
 extern int ticksSinceLastJump;
 extern const int TICKS_BETWEEN_JUMPS_MIN;

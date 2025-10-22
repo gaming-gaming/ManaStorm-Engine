@@ -82,7 +82,7 @@ meshes = [
         'offset': (0, 0, 0),
         'normals': cube_normals,
         'uvs': cube_uvs,
-        'material': 'concrete'
+        'material': 'test_orange_wall'
     },
     {
         'name': 'Cube_1',
@@ -90,7 +90,7 @@ meshes = [
         'offset': (4, -1, 0),
         'normals': cube_normals,
         'uvs': cube_uvs,
-        'material': 'concrete'
+        'material': 'test_orange_wall'
     },
     {
         'name': 'Cube_2',
@@ -98,22 +98,22 @@ meshes = [
         'offset': (6, -2, 0),
         'normals': cube_normals,
         'uvs': cube_uvs,
-        'material': 'concrete'
+        'material': 'test_orange_wall'
     },
     {
         'name': 'Cube_3',
         'vertices': cube_vertices,
-        'offset': (-4, 1, 0),
+        'offset': (-6, 1, 0),
         'normals': cube_normals,
         'uvs': cube_uvs,
-        'material': 'concrete'
+        'material': 'test_orange_wall'
     },
     {
         'name': 'Floor',
         'vertices': floor_vertices,
         'normals': floor_normals,
         'uvs': floor_uvs,
-        'material': 'sterile_tile'
+        'material': 'test_black_floor'
     }
 ]
 

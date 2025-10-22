@@ -103,10 +103,9 @@ btRigidBody* PhysicsManager::createPlayerCapsule(const glm::vec3& position, floa
     btDefaultMotionState* motionState = new btDefaultMotionState(startTransform);
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, capsuleShape, localInertia);
     
-    // Set friction to nearly zero to prevent wall-hugging
-    rbInfo.m_friction = 0.0f; // No friction - we handle it manually
-    rbInfo.m_restitution = 0.0f;
-    rbInfo.m_linearDamping = 0.0f;
+    rbInfo.m_friction = 0.0f; // No friction, we handle it manually in game_process.cpp (to avoid wall sticking)
+    rbInfo.m_restitution = 0.0f; // No bounciness
+    rbInfo.m_linearDamping = 0.1f;
     rbInfo.m_angularDamping = 0.95f;
     
     btRigidBody* body = new btRigidBody(rbInfo);

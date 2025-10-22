@@ -8,17 +8,18 @@ const char thankyou[32] __attribute__((used, section(".rodata"))) = "Thank you f
 #include <unordered_map>
 #include <windows.h>
 
-// #include <SDL2/SDL.h>
+#define SDL_MAIN_HANDLED // Prevent SDL from overriding main()
+#include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "GameMeta.hpp"
 #include "game_process.hpp"
 #include "config/EngineConfig.hpp"
-#include "input/input.hpp"
 #include "graphics/render.hpp"
 #include "graphics/TextureManager.hpp"
 #include "graphics/window.hpp"
+#include "input/InputManager.hpp"
 
 const std::string CONFIG_FILE_NAME = "engine_config.json";
 const std::string META_FILE_NAME = "game_meta.json";
@@ -31,12 +32,13 @@ int main() {
         MessageBoxA(nullptr, "Failed to initialize GLFW.", "Fatal Error", MB_ICONERROR);
         ExitProcess(1);
     }
-    /*
-    if (SDL_Init(SDL_INIT_GAMECONTROLLER) != 0) {
+    SDL_SetMainReady(); // Inform SDL that main is ready
+    if (SDL_Init(SDL_INIT_GAMECONTROLLER) != 0) { // Initialize SDL for game controller support
         MessageBoxA(nullptr, "Failed to initialize SDL.", "Fatal Error", MB_ICONERROR);
         ExitProcess(1);
     }
-    */
+
+    InitializeInput(); // Initialize input
 
     // Load engine configuration
     EngineConfig engineConfig;

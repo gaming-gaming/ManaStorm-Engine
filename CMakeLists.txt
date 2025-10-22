@@ -15,6 +15,7 @@ add_executable(ManaStormEngine
     src/graphics/TextureManager.cpp
     src/graphics/window.cpp
     src/config/EngineConfig.cpp
+    src/input/InputManager.cpp
 )
 
 # Add libraries
@@ -23,6 +24,9 @@ include_directories(include/bullet)
 link_directories(lib)
 # TODO: Add SDL2
 target_link_libraries(ManaStormEngine 
+    mingw32
+    SDL2main
+    SDL2
     glfw3
     glew32
     opengl32
