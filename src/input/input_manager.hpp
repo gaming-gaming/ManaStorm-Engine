@@ -8,6 +8,8 @@ struct ControllerButtonsState {
     bool move_right = false;
     bool use = false;
     bool jump = false;
+    bool slide = false;
+    bool grapple = false;
 };
 
 struct ControllerAnalogState {

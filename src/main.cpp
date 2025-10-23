@@ -19,7 +19,7 @@ const char thankyou[32] __attribute__((used, section(".rodata"))) = "Thank you f
 #include "graphics/render.hpp"
 #include "graphics/TextureManager.hpp"
 #include "graphics/window.hpp"
-#include "input/InputManager.hpp"
+#include "input/input_manager.hpp"
 
 const std::string CONFIG_FILE_NAME = "engine_config.json";
 const std::string META_FILE_NAME = "game_meta.json";

@@ -1,4 +1,5 @@
 #include "PhysicsManager.hpp"
+#include <algorithm>
 #include <iostream>
 
 PhysicsManager::PhysicsManager() {
@@ -51,7 +52,7 @@ void PhysicsManager::createStaticMeshCollision(const TMAPData& mapData) {
         btTriangleMesh* triangleMesh = new btTriangleMesh();
         
         // Assuming triangles (vertices come in groups of 3)
-        for (size_t i = 0; i + 2 < mesh.vertices.size(); i += 3) {
+        for (size_t i = 0; i + 2 <= mesh.vertices.size(); i += 3) {
             btVector3 v0(mesh.vertices[i].x, mesh.vertices[i].y, mesh.vertices[i].z);
             btVector3 v1(mesh.vertices[i+1].x, mesh.vertices[i+1].y, mesh.vertices[i+1].z);
             btVector3 v2(mesh.vertices[i+2].x, mesh.vertices[i+2].y, mesh.vertices[i+2].z);
@@ -89,7 +90,8 @@ void PhysicsManager::createStaticMeshCollision(const TMAPData& mapData) {
 }
 
 btRigidBody* PhysicsManager::createPlayerCapsule(const glm::vec3& position, float radius, float height) {
-    btCapsuleShape* capsuleShape = new btCapsuleShape(radius, height);
+    float hemispheresHeight = radius * 2.0f;
+    btCapsuleShape* capsuleShape = new btCapsuleShape(radius, height - hemispheresHeight);
     collisionShapes.push_back(capsuleShape);
     
     btTransform startTransform;
@@ -119,6 +121,72 @@ btRigidBody* PhysicsManager::createPlayerCapsule(const glm::vec3& position, floa
               << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
     
     return body;
+}
+
+btCollisionShape* PhysicsManager::createCapsuleShape(float radius, float height) {
+    float hemispheresHeight = radius * 2.0f;
+    btCapsuleShape* capsuleShape = new btCapsuleShape(radius, height - hemispheresHeight);
+    collisionShapes.push_back(capsuleShape);
+    return capsuleShape;
+}
+
+// Change player capsule with new dimensions for sliding/standing
+void PhysicsManager::swapPlayerShape(btRigidBody* body, btCollisionShape* newShape, const glm::vec3& positionOffset) {
+    if (!body || !newShape) return;
+    
+    // Store current state
+    btTransform trans;
+    body->getMotionState()->getWorldTransform(trans);
+    btVector3 velocity = body->getLinearVelocity();
+    btVector3 angularVelocity = body->getAngularVelocity();
+    
+    // Apply position offset
+    trans.setOrigin(trans.getOrigin() + glmToBt(positionOffset));
+    
+    // Update the collision shape
+    body->setCollisionShape(newShape);
+    
+    // Recalculate inertia for new shape
+    float mass = 1.0f / body->getInvMass(); // Get mass from inverse
+    btVector3 localInertia(0, 0, 0);
+    newShape->calculateLocalInertia(mass, localInertia);
+    body->setMassProps(mass, localInertia);
+    
+    // Restore state
+    body->getMotionState()->setWorldTransform(trans);
+    body->setWorldTransform(trans);
+    body->setLinearVelocity(velocity);
+    body->setAngularVelocity(angularVelocity);
+    
+    // Force Bullet to update internal structures
+    body->activate(true);
+    dynamicsWorld->updateSingleAabb(body);
+}
+
+float PhysicsManager::getGroundDistance(btRigidBody* body) {
+    btTransform trans;
+    body->getMotionState()->getWorldTransform(trans);
+    btVector3 start = trans.getOrigin();
+    btVector3 end = start - btVector3(0, 5.0f, 0); // Cast down 5 units for ground distance check
+    btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
+    dynamicsWorld->rayTest(start, end, rayCallback);
+    if (rayCallback.hasHit()) {
+        return (start - rayCallback.m_hitPointWorld).length();
+    }
+    return 5.0f; // No hit, return max distance
+}
+
+float PhysicsManager::getCeilingDistance(btRigidBody* body) {
+    btTransform trans;
+    body->getMotionState()->getWorldTransform(trans);
+    btVector3 start = trans.getOrigin();
+    btVector3 end = start + btVector3(0, 5.0f, 0); // Cast up 5 units for ceiling distance check
+    btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
+    dynamicsWorld->rayTest(start, end, rayCallback);
+    if (rayCallback.hasHit()) {
+        return (start - rayCallback.m_hitPointWorld).length();
+    }
+    return 5.0f; // No hit, return max distance
 }
 
 btDiscreteDynamicsWorld* PhysicsManager::getDynamicsWorld() const {

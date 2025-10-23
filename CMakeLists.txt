@@ -15,7 +15,7 @@ add_executable(ManaStormEngine
     src/graphics/TextureManager.cpp
     src/graphics/window.cpp
     src/config/EngineConfig.cpp
-    src/input/InputManager.cpp
+    src/input/input_manager.cpp
 )
 
 # Add libraries

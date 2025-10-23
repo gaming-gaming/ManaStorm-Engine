@@ -1,4 +1,4 @@
-#include "InputManager.hpp"
+#include "input_manager.hpp"
 
 #include <windows.h>
 #include <SDL2/SDL.h>
@@ -48,6 +48,12 @@ ControllerState ProcessInput() {
         if (GetAsyncKeyState('E') & 0x8000) {
             state.buttons.use = true;
         }
+        if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+            state.buttons.slide = true;
+        }
+        if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+            state.buttons.grapple = true;
+        }
     #endif
 
     // Game controller input
@@ -55,6 +61,7 @@ ControllerState ProcessInput() {
         // Buttons
         state.buttons.jump |= SDL_GameControllerGetButton(g_controller, SDL_CONTROLLER_BUTTON_A);
         state.buttons.use |= SDL_GameControllerGetButton(g_controller, SDL_CONTROLLER_BUTTON_X);
+        state.buttons.slide |= SDL_GameControllerGetButton(g_controller, SDL_CONTROLLER_BUTTON_LEFTSTICK);
 
         // Analog sticks
         state.analog.left_x = SDL_GameControllerGetAxis(g_controller, SDL_CONTROLLER_AXIS_LEFTX) / 32767.0f;
@@ -63,7 +70,9 @@ ControllerState ProcessInput() {
         state.analog.right_y = SDL_GameControllerGetAxis(g_controller, SDL_CONTROLLER_AXIS_RIGHTY) / 32767.0f;
         state.analog.left_trigger = SDL_GameControllerGetAxis(g_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT) / 32767.0f;
         state.analog.right_trigger = SDL_GameControllerGetAxis(g_controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) / 32767.0f;
+        state.buttons.grapple |= (state.analog.right_trigger > 0.5f);
     }
     
+    state.buttons.slide = false; // Temporary: disable sliding until fixed
     return state;
 }

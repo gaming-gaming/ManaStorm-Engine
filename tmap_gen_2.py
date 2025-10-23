@@ -109,6 +109,14 @@ meshes = [
         'material': 'test_orange_wall'
     },
     {
+        'name': 'Cube_4',
+        'vertices': cube_vertices,
+        'offset': (-8, 2, 2),
+        'normals': cube_normals,
+        'uvs': cube_uvs,
+        'material': 'test_orange_wall'
+    },
+    {
         'name': 'Floor',
         'vertices': floor_vertices,
         'normals': floor_normals,

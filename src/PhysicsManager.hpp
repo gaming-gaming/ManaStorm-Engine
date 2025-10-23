@@ -31,6 +31,15 @@ public:
     
     // Create player capsule
     btRigidBody* createPlayerCapsule(const glm::vec3& position, float radius, float height);
+
+    btCollisionShape* createCapsuleShape(float radius, float height);
+
+    // Change player capsule with new dimensions
+    void swapPlayerShape(btRigidBody* body, btCollisionShape* newShape, const glm::vec3& positionOffset);
+
+    // Get distances using raycasts for unsliding logic
+    float getGroundDistance(btRigidBody* body);
+    float getCeilingDistance(btRigidBody* body);
     
     // Helper to convert between GLM and Bullet vectors
     static btVector3 glmToBt(const glm::vec3& v) {
